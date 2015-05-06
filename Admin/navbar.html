@@ -1,0 +1,42 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <!--<a class="navbar-brand" href="#">
+        <img id="logo" alt="Brand" src="https://www.googledrive.com/host/0B-y5PxJT5zp1b0EwZHo0SkU0ZmM/techLogo_small.png">
+      </a> -->
+      <ul class="nav nav-tabs nav-justified" id="myTab">
+        <li role="presentation" class="active"><a href="#home" id="homeTab" class="navTab">Home</a></li>
+        <li role="presentation"><a href="#stipend" id="stipendTab" class="navTab"> Stipend Request</a></li>
+        <li role="presentation"><a href="#supply" id="supplyTab" class="navTab">Supply Request</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<script>
+
+  $('#stipendTab').click(loadStipend);
+  $('#homeTab').click(loadHome);
+  $('#supplyTab').click(loadSupply);
+  
+  function loadStipend(){
+    $('.pageDiv').addClass("hidden");
+    $('#stipendDiv').removeClass("hidden");
+    $('#myTab a[href="#stipend"]').tab('show');
+  }
+  
+  function loadSupply(){
+    $('.pageDiv').addClass("hidden");
+    $('#supplyDiv').removeClass("hidden");
+    $('#myTab a[href="#supply"]').tab('show');
+  }
+  
+  function loadHome(){
+    $('.pageDiv').addClass("hidden");
+    $('#homeDiv').removeClass("hidden");
+    $('#myTab a[href="#home"]').tab('show');
+  }
+
+</script>
