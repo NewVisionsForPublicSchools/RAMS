@@ -1,3 +1,80 @@
 <div class="container-fluid pageDiv hidden" id="stipendDiv">
-  Hello Stipend World
+  <div class="col-md-6 col-md-offset-3">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingOne">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Remove school leadership from Stipend Request
+            </a>
+          </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+          <div class="panel-body">
+             <form class="form-inline">
+               <div class="form-group">                 
+                 <label class="sr-only" for="rmSchool">School</label>
+                 <div class="input-group">
+                   <div class="input-group-addon">School</div>
+                   <select class="form-control" id="rmSchool">
+                     <option>AMS</option>
+                     <option>AMS 2</option>
+                     <option>AMS 3</option>
+                     <option>HUM</option>
+                     <option>HUM 2</option>
+                     <option>HUM 3</option>
+                   </select>
+                 </div> <!-- close input-group -->
+               </div> <!-- close form-group -->
+               <div class="form-group">
+                 <label class="sr-only" for="rmUsername">Email</label>
+                 <div class="input-group">
+                   <div class="input-group-addon">@</div>
+                   <input type="text" class="form-control" id="rmUsername" placeholder="Email Address">
+                 </div> <!-- close input-group -->
+               </div> <!-- close form-group -->
+               <button type="submit" class="btn btn-primary">Remove User</button>
+             </form>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+             Add school leadership to Stipend Request
+            </a>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            <form class="form-inline">
+               <div class="form-group">                 
+                 <label class="sr-only" for="addSchool">School</label>
+                 <div class="input-group">
+                   <div class="input-group-addon">School</div>
+                   <select class="form-control" id="addSchool">
+                     <option>AMS</option>
+                     <option>AMS 2</option>
+                     <option>AMS 3</option>
+                     <option>HUM</option>
+                     <option>HUM 2</option>
+                     <option>HUM 3</option>
+                   </select>
+                 </div> <!-- close input-group -->
+               </div> <!-- close form-group -->
+               <div class="form-group">
+                 <label class="sr-only" for="addUsername">Email</label>
+                 <div class="input-group">
+                   <div class="input-group-addon">@</div>
+                   <input type="text" class="form-control" id="addUsername" placeholder="Email Address">
+                 </div> <!-- close input-group -->
+               </div> <!-- close form-group -->
+               <button type="submit" class="btn btn-primary">Add User</button>
+             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
