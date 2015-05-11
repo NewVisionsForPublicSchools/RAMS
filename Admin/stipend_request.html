@@ -11,18 +11,19 @@
         </div>
         <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
           <div class="panel-body">
-             <form class="form-inline">
+             <form class="form-inline" id="removeForm" method="get" action="" onsubmit="return false">
                <div class="form-group">                 
                  <label class="sr-only" for="rmSchool">School</label>
                  <div class="input-group">
                    <div class="input-group-addon">School</div>
-                   <select class="form-control" id="rmSchool">
+                   <select class="form-control" id="rmSchool" name="rmSchool">
                      <option>AMS</option>
                      <option>AMS 2</option>
                      <option>AMS 3</option>
                      <option>HUM</option>
                      <option>HUM 2</option>
                      <option>HUM 3</option>
+                     <option>TEST</option>
                    </select>
                  </div> <!-- close input-group -->
                </div> <!-- close form-group -->
@@ -30,10 +31,11 @@
                  <label class="sr-only" for="rmUsername">Email</label>
                  <div class="input-group">
                    <div class="input-group-addon">@</div>
-                   <input type="text" class="form-control" id="rmUsername" placeholder="Email Address">
+                   <input type="text" class="form-control" id="rmUsername" name="rmUsername" placeholder="Email Address">
                  </div> <!-- close input-group -->
                </div> <!-- close form-group -->
-               <button type="submit" class="btn btn-primary">Remove User</button>
+               <button type="button" class="btn btn-primary" id="removeBtn"
+                 onclick="google.script.run.withSuccessHandler(updateResults).removeUser(this.parentNode)">Remove User</button>
              </form>
           </div>
         </div>
@@ -48,18 +50,19 @@
         </div>
         <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
           <div class="panel-body">
-            <form class="form-inline">
+            <form class="form-inline" id="addForm" method="get" action="" onsubmit="return false">
                <div class="form-group">                 
                  <label class="sr-only" for="addSchool">School</label>
                  <div class="input-group">
                    <div class="input-group-addon">School</div>
-                   <select class="form-control" id="addSchool">
+                   <select class="form-control" id="addSchool" name="addSchool">
                      <option>AMS</option>
                      <option>AMS 2</option>
                      <option>AMS 3</option>
                      <option>HUM</option>
                      <option>HUM 2</option>
                      <option>HUM 3</option>
+                     <option>TEST</option>
                    </select>
                  </div> <!-- close input-group -->
                </div> <!-- close form-group -->
@@ -67,14 +70,45 @@
                  <label class="sr-only" for="addUsername">Email</label>
                  <div class="input-group">
                    <div class="input-group-addon">@</div>
-                   <input type="text" class="form-control" id="addUsername" placeholder="Email Address">
+                   <input type="text" class="form-control" id="addUsername" name="addUsername" placeholder="Email Address">
                  </div> <!-- close input-group -->
                </div> <!-- close form-group -->
-               <button type="submit" class="btn btn-primary">Add User</button>
+               <button type="button" class="btn btn-primary" id="addBtn"
+                 onclick="google.script.run.withSuccessHandler(updateResults).addUser(this.parentNode)">Add User</button>
              </form>
           </div>
         </div>
       </div>
     </div>
+    <div class="text-center hidden" id="spinnerDiv">
+      <img src="https://www.googledrive.com/host/0B-y5PxJT5zp1b0EwZHo0SkU0ZmM/ajax-loader.gif" id="loading-indicator"/>
+    </div>
+    <div id="results"></div>
   </div>
 </div>
+
+
+
+<script>
+$(document).ajaxSend(function(event, request, settings) {
+  $('#loading-indicator').show();
+});
+
+$(document).ajaxComplete(function(event, request, settings) {
+  $('#loading-indicator').hide();
+});
+
+$('.btn').click(function(){
+  $('#spinnerDiv').removeClass("hidden");
+});
+
+function updateResults(resultHtml){
+  document.getElementById('removeForm').reset();
+  document.getElementById('addForm').reset(); 
+  var outputDiv = document.getElementById('results');
+  outputDiv.innerHTML = resultHtml;
+  $('#spinnerDiv').addClass("hidden");
+}
+
+
+</script>
