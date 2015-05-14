@@ -154,12 +154,27 @@ function getRejectedProgressReports(){
 
 
 
+function getMinimumRequirementsNotMet(){
+  var test, submissionSheet, submissions, data;
+  
+  submissionSheet = SUBMISSIONSS.getSheetByName('Data');
+  submissions = NVSL.getRowsData(submissionSheet);
+  
+  data = submissions.filter(function(e){
+    return (e.numberOfSessions < e.minimumSessions) || (e.totalHours < e.minimumHours);
+  });
+  
+  return data;
+}
+
+
+
 function testFunc(){
   var test, trimester, results;
   
   trimester = 'Total';
   
-  results = getRejectedProgressReports();
+  results = getMinimumRequirementsNotMet();
   debugger;
 }
 
