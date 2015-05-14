@@ -57,19 +57,111 @@ function getAdditionalInformationProposals(trimester){
 
 
 
+function getOnTimeProgressReportSubmissions(){
+  var test, moderatorSheet, moderators, submissionSheet, submissions, deadlineSheet, deadlines, t1, t2, t3,
+      onTimeSubmissions;
+  
+  moderatorSheet = RAMSSS.getSheetByName('1415Moderators');
+  moderators = NVSL.getRowsData(moderatorSheet);
+  deadlineSheet = RAMSSS.getSheetByName('Dates');
+  deadlines = NVSL.getRowsData(deadlineSheet);
+  
+//  t1 = new Date('Dec 17 2014').getTime();
+  t1 = deadlines.filter(function (e){
+    return e.trimester == 1;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  t2 = deadlines.filter(function (e){
+    return e.trimester == 2;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  t3 = deadlines.filter(function (e){
+    return e.trimester == 3;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  onTimeSubmissions = moderators.map(function(e){
+    e.submitted = new Date(e.progressReportSubmittedStatus.split("submitted ")[1]).getTime();
+    e.deadline = e.trimester == 1 ? t1 : e.trimester == 2 ? t2 : t3;
+    return e;
+  }).filter(function(e){ 
+    return e.submitted < e.deadline;
+  });
+
+  return onTimeSubmissions;
+}
+
+
+
+function getLateProgressReportSubmissions(){
+  var test, moderatorSheet, moderators, submissionSheet, submissions, deadlineSheet, deadlines, t1, t2, t3,
+      lateSubmissions;
+  
+  moderatorSheet = RAMSSS.getSheetByName('1415Moderators');
+  moderators = NVSL.getRowsData(moderatorSheet);
+  deadlineSheet = RAMSSS.getSheetByName('Dates');
+  deadlines = NVSL.getRowsData(deadlineSheet);
+  
+//  t1 = new Date('Dec 17 2014').getTime();
+  t1 = deadlines.filter(function (e){
+    return e.trimester == 1;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  t2 = deadlines.filter(function (e){
+    return e.trimester == 2;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  t3 = deadlines.filter(function (e){
+    return e.trimester == 3;
+  }).map(function (e){
+    return e.progressReportSubmission;
+  })[0].getTime();
+  
+  lateSubmissions = moderators.map(function(e){
+    e.submitted = new Date(e.progressReportSubmittedStatus.split("submitted ")[1]).getTime();
+    e.deadline = e.trimester == 1 ? t1 : e.trimester == 2 ? t2 : t3;
+    return e;
+  }).filter(function(e){ 
+    return e.submitted > e.deadline;
+  });
+
+  return lateSubmissions;
+}
+
+
+
+function getRejectedProgressReports(){
+  var test, rejections, moderatorSheet, moderators;
+  
+  moderatorSheet = RAMSSS.getSheetByName('1415Moderators');
+  moderators = NVSL.getRowsData(moderatorSheet);
+  
+  rejections = moderators.filter(function(e){
+    return e.progressReportRejectionEmailStatus;
+  });
+  
+  return rejections;
+}
+
+
+
 function testFunc(){
   var test, trimester, results;
   
   trimester = 'Total';
   
-  results = getApprovedProposals(trimester);
+  results = getRejectedProgressReports();
   debugger;
 }
 
 
 
-function getOnTimeProgressReportSubmissions(){
-  var test;
-  
-  
-}
