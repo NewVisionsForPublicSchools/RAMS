@@ -1,20 +1,16 @@
+
 var ramsSs = SpreadsheetApp.openById('11mX_7vjgn8xAUDsBYOjcRsqQkBXhd5Oc_kRZK0o2d8k');
 var submissionSs = SpreadsheetApp.openById('1uHIcoXEgCHYhXVDP_7hEwu4X6ybM1sicAUITuEF4Ks8');
 var trackingSs = SpreadsheetApp.openById('1-9KDy3y5x9txQlZApFe-0-6wQs9jK0N-n7A2L9Vq1QU');
 
 
 
-function getNewSubmissionsForTracking(){
-  var test, submissionSs, submissionSheet, submissions, trackingSs, paymentSheet, payments,
-      approvedReports, ramsSs, moderatorSheet, moderators, keyedPayments;
+function getNewSubmissionsForTracking(submissions){
+  var test, paymentSheet, payments, approvedReports, moderatorSheet, moderators,
+      keyedPayments;
   
-  submissionSs = SpreadsheetApp.openById('1uHIcoXEgCHYhXVDP_7hEwu4X6ybM1sicAUITuEF4Ks8');
-  submissionSheet = submissionSs.getSheetByName('Data');
-  submissions = NVSL.getRowsData(submissionSheet);
-  trackingSs = SpreadsheetApp.openById('1-9KDy3y5x9txQlZApFe-0-6wQs9jK0N-n7A2L9Vq1QU');
   paymentSheet = trackingSs.getSheetByName('Sheet1');
   payments = NVSL.getRowsData(paymentSheet);
-  ramsSs = SpreadsheetApp.openById('11mX_7vjgn8xAUDsBYOjcRsqQkBXhd5Oc_kRZK0o2d8k');
   moderatorSheet = ramsSs.getSheetByName('1415Moderators');
   moderators = NVSL.getRowsData(moderatorSheet);
   
@@ -37,13 +33,15 @@ function getNewSubmissionsForTracking(){
 
 
 function addNewStipendPayments(){
-  var test, newSubmissions, stipendTrackingRecords, trackingSs, trackingSheet, headers;
+  var test, submissionSheet, submissions, newSubmissions, stipendTrackingRecords, trackingSheet, headers;
   
-  newSubmissions = getNewSubmissionsForTracking();
+  submissionSheet = submissionSs.getSheetByName('Data');
+  submissions = NVSL.getRowsData(submissionSheet);
+  
+  newSubmissions = getNewSubmissionsForTracking(submissions);
   
   if(newSubmissions.length > 0){
-    stipendTrackingRecords = createStipendTrackingRecords(newSubmissions);
-//    trackingSs = SpreadsheetApp.openById('1-9KDy3y5x9txQlZApFe-0-6wQs9jK0N-n7A2L9Vq1QU');
+    stipendTrackingRecords = createStipendTrackingRecords(newSubmissions, submissions);
     trackingSheet = trackingSs.getSheetByName('Sheet1');
     headers = trackingSheet.getRange(1,1,1,trackingSheet.getLastColumn());
     
@@ -54,11 +52,14 @@ function addNewStipendPayments(){
 
 
 
-function createStipendTrackingRecords(moderators){
-  var test, oldRecords, i, a, o, moderatorInfo, newRecord, newRecords;
+function createStipendTrackingRecords(moderators, submissions){
+  var test, oldRecords, keyedSubmissions, moderatorInfo, newRecord, newRecords;
   
   oldRecords = moderators;
-  newRecords = [];
+  keyedSubmissions = submissions.map(function(e){
+    e.key = e.email + "_" + e.proposalNumber + "_" + e.trimester;
+    return e;
+  });
   
   newRecords = oldRecords.map(function(e) {
     var moderatorInfo = getModeratorInfo(e);
@@ -68,5 +69,47 @@ function createStipendTrackingRecords(moderators){
     e.dateApproved = approvedStatus ? approvedStatus.split("sent ")[1].split(" to")[0] : "Confirm manually";
     return e;
   });
+  
   return newRecords;
+}
+
+
+
+function addSubmissionInfo(){
+  var test, paymentSheet, payments, submissionSheet, submissions, subInfoHeaders, kSubs, data, dataKeys, subInfo;
+  
+  paymentSheet = trackingSs.getSheetByName('Sheet1');
+  payments = NVSL.getRowsData(paymentSheet);
+  submissionSheet = submissionSs.getSheetByName('Data');
+  submissions = NVSL.getRowsData(submissionSheet);
+  subInfoHeaders = paymentSheet.getRange(1,6,1,10);
+  
+  kSubs = submissions.map(function(e){
+    e.key = e.email + "_" + e.proposalNumber + "_" + e.trimester;
+    return e;
+  });
+  
+  data = payments.map(function(e){
+    e.key = e.email + "_" + e.proposalNumber + "_" + e.trimester;
+    e.row = payments.indexOf(e) + 2;
+    return e;
+  });
+  
+  dataKeys = data.map(function(e){
+    return e.key;
+  });
+  
+  subInfo = kSubs.map(function(e){
+    var indx = dataKeys.indexOf(e.key);
+    if(indx >= 0){
+      e.paymentRow = indx + 2;
+    }
+    return e
+  }).filter(function(e){
+    return e.paymentRow
+  });
+  
+  subInfo.forEach(function(e){
+      NVSL.setRowsData(paymentSheet, [e], subInfoHeaders, e.paymentRow);
+  });
 }
